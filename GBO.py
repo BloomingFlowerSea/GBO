@@ -29,8 +29,8 @@ class GBO:
         self.max_fes = None
 
     def load_prob(self,
-                  # Problem parameters
-                  evaluator=lambda x: np.sum(x ** 2),
+                      # Problem parameters
+                      evaluator=lambda x: np.sum(x ** 2),
                   dim=30,
                   upper_bound=100.0,
                   lower_bound=-100.0,
@@ -103,7 +103,7 @@ class GBO:
                 sub_ball = []
                 all_samples = np.random.uniform(-1, 1, [int(bias_num), self.dim])
                 all_inps = ball.center + all_samples * ball.radius
-                all_inps = self._map(all_inps, ball.center, ball.radius)
+                all_inps = self._map(all_inps)
                 all_inps_value = self.fit_compute(all_inps)
 
                 all_idvs.append(all_inps)
@@ -126,7 +126,7 @@ class GBO:
 
                 w = np.random.uniform(0.5, 1.5, (guide_num, 1))
                 guide_inps = btm_mean - delta * w
-                guide_inps = self._map(guide_inps, ball.center, ball.radius)
+                guide_inps = self._map(guide_inps)
                 guide_fit = self.fit_compute(guide_inps)
 
                 all_idvs.append(guide_inps)
@@ -166,7 +166,7 @@ class GBO:
             self.fes += 1
         return fitness
 
-    def _map(self, samples, ball, ball_radius):
+    def _map(self, samples):
         # Randomly map points in samples that exceed boundaries
         # Args:
         #   samples(np 2D array): Points to be mapped
